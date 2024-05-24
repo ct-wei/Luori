@@ -13,8 +13,8 @@ budget=0,
 
 # sudo zmap passport
 # input your passport here
-passport="!@#1270719077qwe",
-local_ipv6="2402:f000:6:1401:46a8:42ff:fe43:6d00",
+passport="xxxxxxxxxx",
+local_ipv6="xxxxxxxxxx",
   
 generated_address_path="scaningdata_MCTS/un",
 zmap_result_path="scaningdata_MCTS/unre",
