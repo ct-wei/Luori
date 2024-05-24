@@ -247,9 +247,7 @@ if __name__ == "__main__":
     # make pickle
     num_processes = 100
     
-
     pool = multiprocessing.Pool(num_processes)
-    filenames=os.listdir(scan_config['pickle_file'])
 
     # AS_PickleMaker
     picklemaker=PickleMaker()
@@ -257,11 +255,11 @@ if __name__ == "__main__":
     
     for item in pickleiterator:
         scan_config,built_name,lookuptable,asnum_router,built_type=item
-        # pool.apply_async(
-        #     picklemaker.worker,
-        #     args=(scan_config,built_name,lookuptable,asnum_router,built_type),
-        #     error_callback=picklemaker.err_call_back
-        # )
+        pool.apply_async(
+            picklemaker.worker,
+            args=(scan_config,built_name,lookuptable,asnum_router,built_type),
+            error_callback=picklemaker.err_call_back
+        )
 
     pool.close()
     pool.join()
