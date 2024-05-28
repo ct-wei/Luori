@@ -169,12 +169,6 @@ def Treepolicy(head,config):
     epsilon=config["epsilon"]
     
     if is_trap(node,config):
-        file=open("/home/weichentian/mcts_scan_data/jump.txt")
-        file.write(node.Pattern)
-        file.write(node.N_k)
-        file.write(node.V_k)
-        file.write(node.V_flag)
-        file.close()
         return node
         
     while is_nonterminal(head,node):
