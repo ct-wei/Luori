@@ -251,7 +251,23 @@ if __name__ == "__main__":
     routingprefix = args.routingprefix
     Tree_Type = args.Tree_Type
 
+    
+    
+    # import time
+
+    # start_time = time.time()  # 获取开始时间
+    # file=open(scan_config["scaninglist"],"a")
+    # file.write(str(start_time)+"\n")
+    # file.close()
+    
     MCTSsearch(routingprefix,Tree_Type,scan_config)
+    
+    # end_time = time.time()  # 获取结束时间
+    # file=open(scan_config["scaninglist"],"a")
+    # file.write(str(end_time)+"\n")
+    # file.close()
+
+    # print("执行时间：", end_time - start_time, "秒")
     
     
 

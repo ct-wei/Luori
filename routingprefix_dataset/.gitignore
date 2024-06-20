@@ -161,7 +161,6 @@ cython_debug/
 
 *.pkl
 .DS_Store
-scaningdata_MCTS/
-nohup.out
+router0603/
 
 

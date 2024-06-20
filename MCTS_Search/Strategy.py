@@ -1,6 +1,6 @@
 
 
-from Tools import combine, detectprobes, find_activenode, prefix_to_sixteen, saveprobes, send_probes,outputfullyresponsive
+from Tools import combine, detectprobes, find_activenode, prefix_to_sixteen, saveprobes, send_probes,outputfullyresponsive,send_icmpv6
 from MCTS_node.MCTS_Node import MCTS_Node,MCTS_Head,build_child
 
 
@@ -20,14 +20,21 @@ def do_simulation(node,config,head):
     
     ipv6_addresses=prefix_to_sixteen(real_address)
     
-    prefix,filename=saveprobes(ipv6_addresses,real_address,config)
-    send_probes(filename,prefix,config)
-    active_set=detectprobes(filename,config)
+    active_set=set()
+    print("scaning:",real_address)
+    for ipv6_address in ipv6_addresses:
+        if send_icmpv6(ipv6_address):
+            active_set.add(ipv6_address)
+    
+    # prefix,filename=saveprobes(ipv6_addresses,real_address,config)
+    # send_probes(filename,prefix,config)
+    # active_set=detectprobes(filename,config)
+    
     active_node=find_activenode(active_set,length)
     build_child(node)
     
     file=open(config["scaninglist"],"a")
-    file.write(prefix+"\n")
+    file.write(real_address+"\n")
     file.close()
     
     do_backup(active_set,node,active_node)

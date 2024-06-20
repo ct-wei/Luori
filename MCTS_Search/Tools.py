@@ -64,7 +64,8 @@ def startScaning(config):
     hit_rate = re.findall(r"\d+\.?\d*", p.communicate()[1][-10:].decode('utf-8'))[0]
     print(f"Hit rate: {hit_rate}%")
     return hit_rate
-        
+
+
 
 def send_probes(filename,prefix,config):
 
@@ -151,15 +152,26 @@ def lookup(data,lookuptable,asnum_router):
 def discriminate_fullroutering(routingprefix,config):
     ipv6_addresses=prefix_to_sixteen(routingprefix)
     
-    prefix,filename=saveprobes(ipv6_addresses,routingprefix,config)
-    send_probes(filename,prefix,config)
-    active_set=detectprobes(filename,config)
+    # prefix,filename=saveprobes(ipv6_addresses,routingprefix,config)
+    # send_probes(filename,prefix,config)
+    # active_set=detectprobes(filename,config)
     
+    
+    active_set=set()
+    print("scaning:",routingprefix)
+    for ipv6_address in ipv6_addresses:
+        if send_icmpv6(ipv6_address):
+            active_set.add(ipv6_address)
+            
     if len(active_set)>=config["recheck_limit"] and len(active_set)<16:
-        prefix,filename=saveprobes(ipv6_addresses,routingprefix,config)
-        send_probes(filename,prefix,config)
-        re_active_set=detectprobes(filename,config)
-        active_set.update(re_active_set)
+        # prefix,filename=saveprobes(ipv6_addresses,routingprefix,config)
+        # send_probes(filename,prefix,config)
+        # re_active_set=detectprobes(filename,config)
+        # active_set.update(re_active_set)
+        print("rescaning:",routingprefix)
+        for ipv6_address in ipv6_addresses:
+            if send_icmpv6(ipv6_address):
+                active_set.add(ipv6_address)
         
     if len(active_set)==16:
         return True
@@ -236,9 +248,26 @@ def combine(routingaddress,length,Pattern):
     
     return prefix+"/"+str(pattern_len+length)
 
+def send_icmpv6(ip):
+    try:
+        result = subprocess.Popen(
+            'ping -c 1 {}'.format(ip),  # 要执行的命令。
+            shell=True,  # 使用shell来执行命令。
+            close_fds=True,  # 在子进程执行前关闭所有文件描述符，除了stdin, stdout, stderr。
+            stdout=subprocess.PIPE,  # 子进程的标准输出。
+            stderr=subprocess.PIPE   # 子进程的标准错误输出。
+        )
+        stdout, stderr = result.communicate()
+        if result.returncode == 0:
+            return True
+        else:
+            return False
+    except Exception as e:
+        print("执行Ping命令时发生错误:", e)
+
 
 if __name__ == "__main__":
-    print(prefix_to_sixteen("2001:1248:5f54::/48"))
+    print(prefix_to_sixteen("2a00:1c50:94::/48"))
     
     
     

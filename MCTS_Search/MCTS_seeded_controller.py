@@ -118,7 +118,7 @@ class SeededPrefixIterator():
 # @profile
 def do_main_job(scan_config):
 
-    num_processes = 100  # 设置想要同时运行的进程数量
+    num_processes = 300  # 设置想要同时运行的进程数量
     
     pool = multiprocessing.Pool(num_processes)
     

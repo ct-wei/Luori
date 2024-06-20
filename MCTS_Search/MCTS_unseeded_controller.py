@@ -135,7 +135,7 @@ class RoutingPrefixIterator():
 # @profile
 def do_main_job(scan_config):
 
-    num_processes = 150  # 设置想要同时运行的进程数量
+    num_processes = 500  # 设置想要同时运行的进程数量
     
     num=0
 
