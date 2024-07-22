@@ -7,7 +7,7 @@ import subprocess
 import sys
 import time
 import pandas as pd
-from Tools import send_probes,finish_routingprefix,load_checked_routingset
+from Tools import initializer, send_probes,finish_routingprefix,load_checked_routingset
 import pickle
 import pyasn
 sys.path.append('.')
@@ -29,7 +29,7 @@ class MCTS_Searcher(object):
 
     @staticmethod
     def err_call_back(err):
-        print(f'error：{str(err)}')
+        print(f"error:{str(err)}")
 
 
 def load_lookuptable(filename):
@@ -118,10 +118,16 @@ class SeededPrefixIterator():
 # @profile
 def do_main_job(scan_config):
 
-    num_processes = 300  # 设置想要同时运行的进程数量
+    num_processes = 200  # 设置想要同时运行的进程数量
     
-    pool = multiprocessing.Pool(num_processes)
+    pool = multiprocessing.Pool(num_processes,initializer=initializer)
     
+    import time
+
+    start_time = time.time()  # 获取开始时间
+    file=open(scan_config["scanninglist"],"a")
+    file.write(str(start_time)+"\n")
+    file.close()
     
     # MCTS_Searcher
     searcher = MCTS_Searcher()
@@ -129,9 +135,8 @@ def do_main_job(scan_config):
     routingprefixiterator=SeededPrefixIterator(scan_config)
     
     for routingprefix,Tree_Type,transfer_level in routingprefixiterator:
-
+        # print(routingprefix,Tree_Type,transfer_level)
         if transfer_level!="failing":
-            # print(routingprefix,Tree_Type,transfer_level)
             
             pool.apply_async(
                 searcher.worker,
@@ -142,6 +147,12 @@ def do_main_job(scan_config):
     pool.close()
     pool.join()
     
+    end_time = time.time()  # 获取结束时间
+    file=open(scan_config["scanninglist"],"a")
+    file.write(str(end_time)+"\n")
+    file.close()
+
+    print("执行时间：", end_time - start_time, "秒")
     
     
 if __name__ == "__main__":

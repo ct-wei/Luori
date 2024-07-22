@@ -30,8 +30,8 @@ def init_MCTS_Node(routingprefix,head):
         
         
     
-def is_satisfied(config):
-    if config['budget']<config["budget_limit"]:
+def is_satisfied(config,head):
+    if config['budget']<config["budget_limit"] and head.V_flag!=1 and config['failing_time']<config['failing_budget']:
         return True
     return False
 
@@ -62,7 +62,7 @@ def expand(node):
         
 def bestchild(node,epsilon):
     if node.V_flag==1:
-        return "FRP"
+        return "Retry"
     
     # choose the max known node
     if random.random()>epsilon:
@@ -78,7 +78,7 @@ def bestchild(node,epsilon):
             valuels.append(getvalue(node,child,"p"))
             
     if sum(valuels)==0:
-        return "FRP"
+        return "Retry"
 
     max_id=valuels.index(max(valuels))
     return  node.nextnode[max_id]
@@ -107,8 +107,11 @@ def Treepolicy(head,config):
         
     while is_nonterminal(head,node):
         node=bestchild(node,epsilon)
-        if node=="FRP":
-            return "FRP"
+        if node=="Retry":
+            return "Retry"
+        
+        if is_trap(node,config):
+            return node
         
         if not isfullyexpanded(node):
             return node 
@@ -136,11 +139,15 @@ def MCTSsearch(routingprefix,Tree_Type,config):
     
         head=init_MCTS_Node(routingprefix,head)
         # first scan for 500 times
-        while(is_satisfied(config)):
+        while is_satisfied(config,head):
             node=Treepolicy(head,config)
-            config['budget']+=1
-            if node!="FRP":
+            
+            if node!="Retry":
                 Defaultpolicy(node,config,head)
+                config['budget']+=1
+                config['failing_time']=0
+            else:
+                config['failing_time']+=1
     
         
     file=open(config["logpath"],"a")
@@ -172,15 +179,28 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Demo of argparse')
     
-    parser.add_argument('--routingprefix', type=str, default="2803:f800:50::/45")
-    parser.add_argument('--Tree_Type', type=str, default="38")
+    parser.add_argument('--routingprefix', type=str, default="2a00:1c98::/32")
+    parser.add_argument('--Tree_Type', type=str, default="34762")
     
     args = parser.parse_args()
     routingprefix = args.routingprefix
     Tree_Type = args.Tree_Type
     
+    import time
 
+    # start_time = time.time()  # 获取开始时间
+    # file=open(scan_config["scanninglist"],"a")
+    # file.write(str(start_time)+"\n")
+    # file.close()
+    
     MCTSsearch(routingprefix,Tree_Type,scan_config)
+    
+    # end_time = time.time()  # 获取结束时间
+    # file=open(scan_config["scanninglist"],"a")
+    # file.write(str(end_time)+"\n")
+    # file.close()
+
+    # print("执行时间：", end_time - start_time, "秒")
 
     
 

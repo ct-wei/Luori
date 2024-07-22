@@ -1,13 +1,16 @@
 
-
+# -*- coding: utf-8 -*-
+import time
 import ipaddress
+import multiprocessing
 import os
 import re
 import secrets
 import subprocess
+import threading
 import pandas as pd
 import pyasn
-
+from scapy.all import *
 
 def add_ipv6_colon(ipv6):
     # add : to ipv6
@@ -51,11 +54,14 @@ def saveprobes(ipv6_addresses,prefix,config):
             
     return prefix,filename
 
+def initializer():
+    # 将当前进程设置为非守护进程
+    multiprocessing.current_process().daemon = False
 
-def startScaning(config):
+def startScanning(config):
     
     print(f"Running zmap for prefix {config['prefix']}...")
-    cmd = (f"sudo -S zmap -i eno1 --ipv6-source-ip={config['local_ipv6']} "
+    cmd = (f"sudo -S zmap --ipv6-source-ip={config['local_ipv6']} "
             f"--ipv6-target-file={config['generated_address_path']} "
             f"-o {config['zmap_result_path']} -M icmp6_echoscan -B 10M --verbosity=0")
     echo = subprocess.Popen(['echo',config['passport']], stdout=subprocess.PIPE,)
@@ -76,7 +82,7 @@ def send_probes(filename,prefix,config):
         passport=config["passport"],
         local_ipv6=config["local_ipv6"]
     )
-    startScaning(fileconfig)
+    startScanning(fileconfig)
     
 
 def detectprobes(filename,config):
@@ -157,21 +163,18 @@ def discriminate_fullroutering(routingprefix,config):
     # active_set=detectprobes(filename,config)
     
     
+
+    print("scanning:",routingprefix)    
     active_set=set()
-    print("scaning:",routingprefix)
-    for ipv6_address in ipv6_addresses:
-        if send_icmpv6(ipv6_address):
-            active_set.add(ipv6_address)
-            
+    send_icmpv6(ipv6_addresses,active_set)
+    
     if len(active_set)>=config["recheck_limit"] and len(active_set)<16:
         # prefix,filename=saveprobes(ipv6_addresses,routingprefix,config)
         # send_probes(filename,prefix,config)
         # re_active_set=detectprobes(filename,config)
         # active_set.update(re_active_set)
-        print("rescaning:",routingprefix)
-        for ipv6_address in ipv6_addresses:
-            if send_icmpv6(ipv6_address):
-                active_set.add(ipv6_address)
+        print("rescanning:",routingprefix)
+        send_icmpv6(ipv6_addresses,active_set)
         
     if len(active_set)==16:
         return True
@@ -248,7 +251,7 @@ def combine(routingaddress,length,Pattern):
     
     return prefix+"/"+str(pattern_len+length)
 
-def send_icmpv6(ip):
+def ping(ip):
     try:
         result = subprocess.Popen(
             'ping -c 1 {}'.format(ip),  # 要执行的命令。
@@ -257,17 +260,76 @@ def send_icmpv6(ip):
             stdout=subprocess.PIPE,  # 子进程的标准输出。
             stderr=subprocess.PIPE   # 子进程的标准错误输出。
         )
+
         stdout, stderr = result.communicate()
+        
         if result.returncode == 0:
-            return True
+            result=True
         else:
-            return False
+            result=False
+            
     except Exception as e:
         print("执行Ping命令时发生错误:", e)
+        
+    return result
 
+# def send_icmpv6(ips,result_set):
+#     for ip in ips:
+#         if ping(ip):
+#             result_set.add(ip)
+        
+   
+#     return result_set
+
+def send_icmpv6(target_ipv6s,result_set):
+    threads=[]        #deposit thresds
+    conf.verb = 0
+    
+    # print(target_ipv6s)
+    for target_ipv6 in target_ipv6s:    #create an instance of an object
+        t=threading.Thread(target=make_icmpv6,args=(target_ipv6,result_set))
+        threads.append(t)
+
+    for thread in threads:    #start threads
+        time.sleep(1.5)
+        thread.start()
+
+    for thread in threads:    # wait for all
+        thread.join()       # threads to finish
+    
+    return result_set
+
+def make_icmpv6(target_ipv6,result_set):
+    t=1
+    # 构造ICMPv6 Echo Request包
+    for _ in range(t):
+        try:
+            pkt = IPv6(dst=target_ipv6) / ICMPv6EchoRequest()
+            # 发送包并接收响应
+            reply=sr1(pkt, verbose=False,timeout=1)
+            if reply and ICMPv6EchoReply in reply:
+                result_set.add(target_ipv6)
+                return
+            
+                    
+        except Exception as e:
+            print("sending ICMPv6 error",e)
+        
 
 if __name__ == "__main__":
-    print(prefix_to_sixteen("2a00:1c50:94::/48"))
+    # print(prefix_to_sixteen("2001:250:7809::/48"))
+    ip="2c0f:ff40:0030:0282:4295:25fa:9474:27e2"
+    ips=['2a09:b686:6006:832b:dce2:8266:5247:8649', '2a09:b686:600f:afa0:0b18:890a:5082:c4cb', '2a09:b686:6012:3f65:e28a:8aa2:c01a:f6a3', '2a09:b686:601f:2009:95f6:3d3b:af80:edb5', '2a09:b686:6026:f274:e9a0:2723:5e78:e620', '2a09:b686:602f:bc36:c46e:8d11:18cb:1601', '2a09:b686:6031:a490:01d0:bc81:6a2a:9539', '2a09:b686:603b:7d29:b9b7:797d:bdf2:d9fc', '2a09:b686:6043:4d8b:7fa8:b23d:f93b:cf22', '2a09:b686:6049:8b51:6d48:5afe:c16c:8b87', '2a09:b686:6054:d6b3:0cd5:0f1b:9390:97d3', '2a09:b686:605f:3d4e:f366:d760:2694:d22f', '2a09:b686:6066:39e9:01d1:5575:32e2:e5d8', '2a09:b686:6069:6922:77a3:f12c:1948:d513', '2a09:b686:6076:ec90:d32d:6fc2:69fe:d574', '2a09:b686:607e:ad62:505e:732c:d860:bdf8']
+    # ips=[' 2001:0250:7809:0e69:8637:99bd:c83c:d6cc']
+
+    result_set=set()
+    # make_icmpv6(ip,result_set)
+    
+    start_time = time.time()  # 获取开始时间
+    send_icmpv6(ips,result_set)
+    end_time = time.time()  # 获取结束时间
+    print("执行时间：", end_time - start_time, "秒")
+    print(len(result_set))
     
     
     

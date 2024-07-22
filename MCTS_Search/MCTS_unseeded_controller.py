@@ -7,7 +7,7 @@ import subprocess
 import sys
 import time
 import pandas as pd
-from Tools import send_probes,load_checked_routingset
+from Tools import initializer, send_probes,load_checked_routingset
 import pickle
 import pyasn
 sys.path.append('.')
@@ -135,17 +135,23 @@ class RoutingPrefixIterator():
 # @profile
 def do_main_job(scan_config):
 
-    num_processes = 500  # 设置想要同时运行的进程数量
+    num_processes = 200  # 设置想要同时运行的进程数量
     
-    num=0
 
-    pool = multiprocessing.Pool(num_processes)
+    pool = multiprocessing.Pool(num_processes,initializer=initializer)
     
     
     # MCTS_Searcher
     searcher = MCTS_Searcher()
 
     routingprefixiterator=RoutingPrefixIterator(scan_config)
+    
+    import time
+
+    start_time = time.time()  # 获取开始时间
+    file=open(scan_config["scanninglist"],"a")
+    file.write(str(start_time)+"\n")
+    file.close()
     
     for routingprefix,Tree_Type,transfer_level in routingprefixiterator:
 
@@ -158,6 +164,13 @@ def do_main_job(scan_config):
     
     pool.close()
     pool.join()
+    
+    end_time = time.time()  # 获取结束时间
+    file=open(scan_config["scanninglist"],"a")
+    file.write(str(end_time)+"\n")
+    file.close()
+
+    print("执行时间：", end_time - start_time, "秒")
     
     
     
