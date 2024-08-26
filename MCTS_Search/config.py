@@ -1,11 +1,11 @@
-date="seed0722"
+date="unseed0808"
 scan_config=dict(
 
 # just for seeded
-routingprefixpath="routingprefix_dataset/router0722/",
+routingprefixpath="routingprefix_dataset/router0808/",
 
 # hyper para
-budget_limit=200,
+budget_limit=20,
 epsilon=0.3,
 trap_n=3,
 recheck_limit=1,

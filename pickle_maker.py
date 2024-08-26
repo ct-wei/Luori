@@ -240,7 +240,6 @@ def make_pickle_file(config,transfer_name,lookuptable,asnum_router,type):
             pickle.dump(head, file)
             
 
-
     
 if __name__ == "__main__":
        

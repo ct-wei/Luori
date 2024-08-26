@@ -109,6 +109,7 @@ class SeededPrefixIterator():
             transfer_level="AS"
                                     
         Tree_Type=Tree_Type.replace("/","_")
+        
         return routingprefix,Tree_Type,transfer_level
 
 
@@ -118,13 +119,13 @@ class SeededPrefixIterator():
 # @profile
 def do_main_job(scan_config):
 
-    num_processes = 200  # 设置想要同时运行的进程数量
+    num_processes = 100  # set the process number
     
     pool = multiprocessing.Pool(num_processes,initializer=initializer)
     
     import time
 
-    start_time = time.time()  # 获取开始时间
+    start_time = time.time()  # Get the start time
     file=open(scan_config["scanninglist"],"a")
     file.write(str(start_time)+"\n")
     file.close()
@@ -135,9 +136,10 @@ def do_main_job(scan_config):
     routingprefixiterator=SeededPrefixIterator(scan_config)
     
     for routingprefix,Tree_Type,transfer_level in routingprefixiterator:
-        # print(routingprefix,Tree_Type,transfer_level)
+        # pass
+        
         if transfer_level!="failing":
-            
+            # print(routingprefix,Tree_Type,transfer_level)
             pool.apply_async(
                 searcher.worker,
                 args=(routingprefix,Tree_Type,scan_config),
@@ -147,12 +149,12 @@ def do_main_job(scan_config):
     pool.close()
     pool.join()
     
-    end_time = time.time()  # 获取结束时间
+    end_time = time.time()  # Get the end time
     file=open(scan_config["scanninglist"],"a")
     file.write(str(end_time)+"\n")
     file.close()
 
-    print("执行时间：", end_time - start_time, "秒")
+    print("running time", end_time - start_time, "秒")
     
     
 if __name__ == "__main__":

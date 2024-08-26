@@ -130,7 +130,7 @@ def Defaultpolicy(node,config,head):
 
 
 def MCTSsearch(routingprefix,Tree_Type,config):
-    # 从文件读取对象并反序列化
+    # Read objects from a file and deserialize them.
     with open(config['pickle_file']+str(Tree_Type)+'.pkl', 'rb') as file:
         head = pickle.load(file)
         
@@ -188,19 +188,19 @@ if __name__ == "__main__":
     
     import time
 
-    # start_time = time.time()  # 获取开始时间
+    # start_time = time.time()  # get the start time
     # file=open(scan_config["scanninglist"],"a")
     # file.write(str(start_time)+"\n")
     # file.close()
     
     MCTSsearch(routingprefix,Tree_Type,scan_config)
     
-    # end_time = time.time()  # 获取结束时间
+    # end_time = time.time()  # get the end time
     # file=open(scan_config["scanninglist"],"a")
     # file.write(str(end_time)+"\n")
     # file.close()
 
-    # print("执行时间：", end_time - start_time, "秒")
+    # print("running time", end_time - start_time, "seconds")
 
     
 

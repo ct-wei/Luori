@@ -254,11 +254,11 @@ def combine(routingaddress,length,Pattern):
 def ping(ip):
     try:
         result = subprocess.Popen(
-            'ping -c 1 {}'.format(ip),  # 要执行的命令。
-            shell=True,  # 使用shell来执行命令。
-            close_fds=True,  # 在子进程执行前关闭所有文件描述符，除了stdin, stdout, stderr。
-            stdout=subprocess.PIPE,  # 子进程的标准输出。
-            stderr=subprocess.PIPE   # 子进程的标准错误输出。
+            'ping -c 1 {}'.format(ip),  # command
+            shell=True,  # use shell to run
+            close_fds=True, 
+            stdout=subprocess.PIPE,  # std out
+            stderr=subprocess.PIPE   # std error
         )
 
         stdout, stderr = result.communicate()
@@ -269,7 +269,7 @@ def ping(ip):
             result=False
             
     except Exception as e:
-        print("执行Ping命令时发生错误:", e)
+        print("error when running ping:", e)
         
     return result
 
@@ -285,13 +285,12 @@ def send_icmpv6(target_ipv6s,result_set):
     threads=[]        #deposit thresds
     conf.verb = 0
     
-    # print(target_ipv6s)
     for target_ipv6 in target_ipv6s:    #create an instance of an object
         t=threading.Thread(target=make_icmpv6,args=(target_ipv6,result_set))
         threads.append(t)
 
     for thread in threads:    #start threads
-        time.sleep(1.5)
+        time.sleep(0.1)
         thread.start()
 
     for thread in threads:    # wait for all
@@ -301,11 +300,11 @@ def send_icmpv6(target_ipv6s,result_set):
 
 def make_icmpv6(target_ipv6,result_set):
     t=1
-    # 构造ICMPv6 Echo Request包
+    # ICMPv6 Echo Request
     for _ in range(t):
         try:
             pkt = IPv6(dst=target_ipv6) / ICMPv6EchoRequest()
-            # 发送包并接收响应
+            # send & receive
             reply=sr1(pkt, verbose=False,timeout=1)
             if reply and ICMPv6EchoReply in reply:
                 result_set.add(target_ipv6)
@@ -325,10 +324,10 @@ if __name__ == "__main__":
     result_set=set()
     # make_icmpv6(ip,result_set)
     
-    start_time = time.time()  # 获取开始时间
+    start_time = time.time()  # get the start time
     send_icmpv6(ips,result_set)
-    end_time = time.time()  # 获取结束时间
-    print("执行时间：", end_time - start_time, "秒")
+    end_time = time.time()  # get the end time
+    print("running time", end_time - start_time, "seconds")
     print(len(result_set))
     
     

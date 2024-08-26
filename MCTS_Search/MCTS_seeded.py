@@ -224,14 +224,13 @@ def MCTSsearch(routingprefix,Tree_Type,config):
         head = pickle.load(file)
         head.routingprefix=routingprefix
     
-    
     if not discriminate_fullroutering(routingprefix,config):
     
         head=init_seeded_Node(routingprefix,head,Tree_Type,config)
         # first scan for 500 times
         while is_satisfied(config,head):
             node=Treepolicy(head,config)
-                
+            
             if node!="Retry":
                 Defaultpolicy(node,config,head)
                 config['budget']+=1
@@ -254,14 +253,11 @@ def MCTSsearch(routingprefix,Tree_Type,config):
 if __name__ == "__main__":
     
     
-    # 1. 定义命令行解析器对象
     parser = argparse.ArgumentParser(description='Demo of argparse')
     
-    # 2. 添加命令行参数
-    parser.add_argument('--routingprefix', type=str, default="2a00:78c0::/29")
-    parser.add_argument('--Tree_Type', type=str, default="30781")
+    parser.add_argument('--routingprefix', type=str, default="240e:983:1e00::/40")
+    parser.add_argument('--Tree_Type', type=str, default="58466")
     
-    # 3. 从命令行中结构化解析参数
     args = parser.parse_args()
     routingprefix = args.routingprefix
     Tree_Type = args.Tree_Type
@@ -270,19 +266,19 @@ if __name__ == "__main__":
     
     import time
 
-    start_time = time.time()  # 获取开始时间
+    start_time = time.time()  # get the start time
     file=open(scan_config["scanninglist"],"a")
     file.write(str(start_time)+"\n")
     file.close()
     
     MCTSsearch(routingprefix,Tree_Type,scan_config)
     
-    end_time = time.time()  # 获取结束时间
+    end_time = time.time()  # get the end time
     file=open(scan_config["scanninglist"],"a")
     file.write(str(end_time)+"\n")
     file.close()
 
-    print("执行时间：", end_time - start_time, "秒")
+    print("running time", end_time - start_time, "seconds")
     
     
 

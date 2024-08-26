@@ -135,7 +135,7 @@ class RoutingPrefixIterator():
 # @profile
 def do_main_job(scan_config):
 
-    num_processes = 200  # 设置想要同时运行的进程数量
+    num_processes = 150  # set the process number
     
 
     pool = multiprocessing.Pool(num_processes,initializer=initializer)
@@ -148,7 +148,7 @@ def do_main_job(scan_config):
     
     import time
 
-    start_time = time.time()  # 获取开始时间
+    start_time = time.time()  # Get the start time
     file=open(scan_config["scanninglist"],"a")
     file.write(str(start_time)+"\n")
     file.close()
@@ -156,6 +156,7 @@ def do_main_job(scan_config):
     for routingprefix,Tree_Type,transfer_level in routingprefixiterator:
 
         if Tree_Type!="failing":
+            # print(routingprefix)
             pool.apply_async(
                 searcher.worker,
                 args=(routingprefix,Tree_Type,scan_config),
@@ -165,12 +166,12 @@ def do_main_job(scan_config):
     pool.close()
     pool.join()
     
-    end_time = time.time()  # 获取结束时间
+    end_time = time.time()  # Get the end time
     file=open(scan_config["scanninglist"],"a")
     file.write(str(end_time)+"\n")
     file.close()
 
-    print("执行时间：", end_time - start_time, "秒")
+    print("running time:", end_time - start_time, "秒")
     
     
     
