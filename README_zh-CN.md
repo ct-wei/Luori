@@ -23,11 +23,19 @@
 python3 pickle_maker.py
 ```
 ### 第2步：设置配置
+
 在 ```MCTS_Search/config.py``` 中设置配置
 
-在 ```passport``` 处输入您的密码
+在 ```trap_n``` 中输入活跃地址跳出陷阱阈值
 
-在 ```local_ipv6``` 处输入您的本地 IPv6 地址
+在 ```scanninglist``` 中输入扫描列表文件名
+
+在 ```fullrespond_path``` 中输入FRP文件名
+
+在 ```logpath``` 中输入日志文件名
+
+在 ```pickle_file``` 中输入生成的文件名
+
 ### 第3步：运行 Luori
 - 对于有种子的路由前缀
 ```bash
