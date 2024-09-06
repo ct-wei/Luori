@@ -2,7 +2,7 @@ date="unseed0808"
 scan_config=dict(
 
 # just for seeded
-routingprefixpath="routingprefix_dataset/router0808/",
+routingprefixpath="routingprefix_dataset/hitlist0504/",
 
 # hyper para
 budget_limit=20,
@@ -13,8 +13,8 @@ budget=0,
 failing_time=0,
 failing_budget=20,
 
-generated_address_path="scanningdata_MCTS/un",
-zmap_result_path="scanningdata_MCTS/unre",
+# generated_address_path="scanningdata_MCTS/un",
+# zmap_result_path="scanningdata_MCTS/unre",
 
 scanninglist="work_dir/scanninglist_"+date+".txt",
 fullrespond_path="work_dir/FRP_"+date+".txt",
