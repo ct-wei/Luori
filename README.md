@@ -28,9 +28,16 @@ python3 pickle_maker.py
 ### Step2 : Set the config
 set the config in ```MCTS_Search/config.py```
 
-Type your passport in ```passport```
+type the trap number in ```trap_n```
 
-Type your local ipv6 address in ```local_ipv6```
+type the scanning list filename in ```scanninglist```
+
+type the FRP filename in ```fullrespond_path```
+
+type the log filename in ```logpath```
+
+type the generated filename in ```pickle_file```
+
 
 ### Step3 : Run Luori
 - For Seeded Routing Prefix
