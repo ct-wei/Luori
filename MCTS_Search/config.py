@@ -23,7 +23,7 @@ logpath="work_dir/log_MCTS_"+date+".txt",
 
 pickle_file='Pickle_file/',
 ASfilename="Lookuptable/as_org_category.csv",
-pyasnfile='pyasn_data/20240721.1600.dat',
+pyasnfile='pyasn_data/20240427.0200.dat',
 
 
 
