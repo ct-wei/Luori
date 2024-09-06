@@ -43,11 +43,15 @@ python3 MCTS_Search/MCTS_unseeded_controller.py
 ## 引用
 如果您在研究中发现这篇论文有用，请引用这篇论文。
 ```
-@article{Luori,
-  title   = {Luori: Active Probing and Evaluation of Internet-wide IPv6 Fully Responsive Prefixes}
-  author  = {},
-  journal= {},
-  year={}
+@inproceedings{cheng2024luori,
+  title = {Luori: Active Probing and Evaluation of Internet-wide IPv6 Fully Responsive Prefixes},
+  author = {Cheng, Daguo and He, Lin and Wei, Chentian and Yin, Qilei and Jin, Boran and Wang, Zhaoan and Pan, Xiaoteng and Zhou, Sixu and Liu, Ying and Zhang, Shenglin and Tan, Fuchao and Liu, Wenmao},
+  booktitle = {Proceedings of the 32nd IEEE International Conference on Network Protocols (ICNP)},
+  year = {2024},
+  pages = {},
+  doi = {},
+  address = {Charleroi, Belgium},
+  date = {October 28-31},
 }
 ```
 ## 许可证
