@@ -26,17 +26,18 @@ python3 pickle_maker.py
 ```
 
 ### Step2 : Set the config
-set the config in ```MCTS_Search/config.py```
+Set the configuration in ```MCTS_Search/config.py```
 
-type the trap number in ```trap_n```
+Enter the active address escape trap threshold in ```trap_n```
 
-type the scanning list filename in ```scanninglist```
+Enter the scanning list filename in ```scanninglist```
 
-type the FRP filename in ```fullrespond_path```
+Enter the FRP filename in ```fullrespond_path```
 
-type the log filename in ```logpath```
+Enter the log filename in ```logpath```
 
-type the generated filename in ```pickle_file```
+Enter the generated filename in ```pickle_file```
+
 
 
 ### Step3 : Run Luori
