@@ -14,7 +14,7 @@ English | [简体中文](README_zh-CN.md)
 
 ## Quick Start
 ### Preparation
-- Import the IP-ASN32-DAT file into the ```Luori/pyasn_data``` folder.
+- Import the IP-ASN32-DAT file into the ```Luori/pyasn_data``` folder.(https://archive.routeviews.org/route-views6/bgpdata/)
 - Import the seeded data into the ```Luori/routingprefix_dataset``` folder classified by routing prefix.
   
   To avoid folder symbol ```/``` ,please use ```_```.
