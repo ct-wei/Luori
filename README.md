@@ -59,16 +59,17 @@ python3 MCTS_Search/MCTS_unseeded_controller.py
 If you find this paper useful in your research, please cite this paper.
 
 ```
-@inproceedings{cheng2024luori,
-  title = {Luori: Active Probing and Evaluation of Internet-wide IPv6 Fully Responsive Prefixes},
-  author = {Cheng, Daguo and He, Lin and Wei, Chentian and Yin, Qilei and Jin, Boran and Wang, Zhaoan and Pan, Xiaoteng and Zhou, Sixu and Liu, Ying and Zhang, Shenglin and Tan, Fuchao and Liu, Wenmao},
-  booktitle = {Proceedings of the 32nd IEEE International Conference on Network Protocols (ICNP)},
-  year = {2024},
-  pages = {},
-  doi = {},
-  address = {Charleroi, Belgium},
-  date = {October 28-31},
-}
+@INPROCEEDINGS{cheng2024luori,
+  author={Cheng, Daguo and He, Lin and Wei, Chentian and Yin, Qilei and Jin, Boran and Wang, Zhaoan and Pan, Xiaoteng and Zhou, Sixu and Liu, Ying and Zhang, Shenglin and Tan, Fuchao and Liu, Wenmao},
+  booktitle={2024 IEEE 32nd International Conference on Network Protocols (ICNP)}, 
+  title={Luori: Active Probing and Evaluation of Internet-Wide IPv6 Fully Responsive Prefixes}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-12},
+  keywords={Protocols;Current measurement;Reinforcement learning;Transforms;Routing;Optimization;IPv6;fully responsive prefix;active probing},
+  doi={10.1109/ICNP61940.2024.10858548}}
+
 ```
 
 ## License
