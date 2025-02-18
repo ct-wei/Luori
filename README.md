@@ -1,4 +1,4 @@
-# FRPv6-Luori 🔍[[ICNP2024]](https://ieeexplore.ieee.org/document/10858548)
+# [[ICNP2024]](https://ieeexplore.ieee.org/document/10858548) FRPv6-Luori 🔍
 This repo contains the official implementation of  [**"Luori: Active Probing and Evaluation of Internet-wide IPv6 Fully Responsive Prefixes"**](https://frpv6.github.io)
 
 
